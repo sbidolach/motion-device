@@ -1,0 +1,7 @@
+{
+    "name": "MotionDeviceEvent",
+    "start_url": "motion.html",
+    "display": "standalone",
+    "orientation": "landscape",
+    "icons": []
+}

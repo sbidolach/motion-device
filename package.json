@@ -1,0 +1,19 @@
+{
+  "name": "motion-device",
+  "version": "0.0.1",
+  "description": "Motion Event on Mobile Device",
+  "author": "contact@softwarelondon.net",
+  "dependencies": {
+    "express": "^4.13.4",
+    "http": "0.0.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-debug-task": "^0.1.8",
+    "grunt-express-server": "^0.5.3",
+    "grunt-open": "^0.2.3"
+  }
+}
