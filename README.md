@@ -2,6 +2,8 @@
 
 This project describe how use motion sensor on mobile device to control object in HTML
 
+Live demo (run on mobile device) - http://sbidolach.github.io/motion-device/
+
 # Quick installation and start
 
 * Run below installation script
