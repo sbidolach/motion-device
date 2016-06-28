@@ -8,8 +8,9 @@ var maxY = garden.clientHeight - ball.clientHeight;
 var positionStart;
 
 var yLimit = 22.5;
+var xLimit = 15.5;
 var yUpLimit, yDownLimit, yMiddlePoint, yStep;
-
+var xRightLimit, xLeftLimit, xMiddlePoint, xStep
 
 if (window.DeviceMotionEvent) {
     window.addEventListener('deviceorientation', function(eventData) {
@@ -22,6 +23,7 @@ if (window.DeviceMotionEvent) {
         //output.innerHTML += "alpha: " + z + "\n";
 
         if (!positionStart) {
+
             positionStart = {
                 x: x,
                 y: y
@@ -43,32 +45,37 @@ if (window.DeviceMotionEvent) {
                     }
                 }
 
-                var size = null;
-                if (yUpLimit < yDownLimit) {
-                    size = yDownLimit - yUpLimit;
-                } else {
-                    size = 90 + yDownLimit + (90 - yUpLimit)
-                }
-
+                var size = 180 - (2 * yLimit);
                 if (y > 0) {
                     yMiddlePoint = yDownLimit - (size / 2);
                 } else {
                     yMiddlePoint = yUpLimit + (size / 2);
                 }
+            }
 
+            if (!xRightLimit && !xLeftLimit) {
+                // Because we don't want to have the device upside down
+                // We constrain the x value to the range [-90,90]
+                xRightLimit = x + xLimit;
+                xLeftLimit = x - xLimit;
+
+                var size = 360 - (2 * xLimit);
+                if (x > 0) {
+                    xMiddlePoint = xLeftLimit - (size / 2);
+                } else {
+                    xMiddlePoint = xRightLimit + (size / 2);
+                }
             }
 
         }
 
-        // Because we don't want to have the device upside down
-        // We constrain the x value to the range [-90,90]
-        var xRightLimit = positionStart.x + 15.5;
-        var xLeftLimit = positionStart.x - 15.5;
         if (x > xRightLimit) {
             x = xRightLimit;
         } else if (x < xLeftLimit) {
             x = xLeftLimit;
         };
+
+        xStep = x - positionStart.x;
 
         // limita area for axis y
         if (yDownLimit > yUpLimit) {
@@ -81,10 +88,20 @@ if (window.DeviceMotionEvent) {
 
             if ((positionStart.y < 0 && y < 0) || (positionStart.y > 0 && y > 0)) {
                 yStep = y - positionStart.y;
-            }
-            // TODO new condition at bottom
-            else {
-                yStep = y - yDownLimit;
+            } else {
+                if (positionStart.y > 0) {
+                    if (y > 0) {
+                        yStep = y + yDownLimit;
+                    } else {
+                        yStep = (90 + y) - yMiddlePoint;
+                    }
+                } else {
+                    if (y > 0) {
+                        yStep = (-90 + y) - yMiddlePoint;
+                    } else {
+                        yStep = y - yDownLimit;
+                    }
+                }
             }
 
         } else {
@@ -112,6 +129,11 @@ if (window.DeviceMotionEvent) {
         output.innerHTML += "yMiddle: " + yMiddlePoint + "\n";
         output.innerHTML += "yStep: " + yStep + "\n";
 
+        output.innerHTML += "xRightLimit: " + xRightLimit + "\n";
+        output.innerHTML += "xLeftLimit: " + xLeftLimit + "\n";
+        output.innerHTML += "xMiddle: " + xMiddlePoint + "\n";
+        output.innerHTML += "xStep: " + xStep + "\n";
+
         output.innerHTML += "x: " + x + "\n";
         output.innerHTML += "y: " + y + "\n";
 
@@ -122,8 +144,8 @@ if (window.DeviceMotionEvent) {
 
         // 10 is half the size of the ball
         // It center the positioning point to the center of the ball
-        ball.style.left = ((maxX / 2) + (x - positionStart.x) * 6) + "px";
-        ball.style.top = ((maxY / 2) + yStep * ((maxY/2)/yLimit)) + "px";
+        ball.style.left = ((maxX / 2) + xStep * ((maxX / 2) / xLimit)) + "px";
+        ball.style.top = ((maxY / 2) + yStep * ((maxY / 2) / yLimit)) + "px";
 
         output.innerHTML += "top: " + ball.style.top + "\n";
         output.innerHTML += "left: " + ball.style.left + "\n";
