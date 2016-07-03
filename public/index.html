@@ -51,8 +51,8 @@
         var limit_y = 25.5;
 
         motionDevice.create({
-            limit_x: 15.5,
-            limit_y: 25.5
+            limit_x: limit_x,
+            limit_y: limit_y
         }).on('move', function(self, data) {
             output.innerHTML = "beta : " + data.event.x + "\n";
             output.innerHTML += "gamma: " + data.event.y + "\n";
