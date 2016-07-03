@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Motion device</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <style type="text/css">
+        .garden {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 5px solid #CCC;
+            border-radius: 10px;
+        }
+
+        .ball {
+            position: absolute;
+            top: 90px;
+            left: 90px;
+            width: 20px;
+            height: 20px;
+            background: green;
+            border-radius: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="garden">
+        <div class="ball"></div>
+    </div>
+
+    <pre class="output"></pre>
+
+    <script src="/js/motion-device.js"></script>
+
+    <script>
+        var ball = document.querySelector('.ball');
+        var garden = document.querySelector('.garden');
+        var output = document.querySelector('.output');
+
+        var maxX = garden.clientWidth - ball.clientWidth;
+        var maxY = garden.clientHeight - ball.clientHeight;
+        var limit_x = 15.5;
+        var limit_y = 25.5;
+
+        motionDevice.create({
+            limit_x: 15.5,
+            limit_y: 25.5
+        }).on('move', function(self, data) {
+            output.innerHTML = "beta : " + data.event.x + "\n";
+            output.innerHTML += "gamma: " + data.event.y + "\n";
+
+            output.innerHTML += "data.limit.up: " + data.limit.up + "\n";
+            output.innerHTML += "data.limit.down: " + data.limit.down + "\n";
+            output.innerHTML += "data.middle.y: " + data.middle.y + "\n";
+            output.innerHTML += "data.step.y: " + data.step.y + "\n";
+
+            output.innerHTML += "data.limit.right: " + data.limit.right + "\n";
+            output.innerHTML += "data.limit.left: " + data.limit.left + "\n";
+            output.innerHTML += "data.middle.x: " + data.middle.x + "\n";
+            output.innerHTML += "data.step.x: " + data.step.x + "\n";
+
+            output.innerHTML += "data.start.x: " + data.start.x + "\n";
+            output.innerHTML += "data.start.y: " + data.start.y + "\n";
+
+            ball.style.left = ((maxX / 2) + data.step.x * ((maxX / 2) / limit_x)) + "px";
+            ball.style.top = ((maxY / 2) + data.step.y * ((maxY / 2) / limit_y)) + "px";
+
+            output.innerHTML += "top: " + ball.style.top + "\n";
+            output.innerHTML += "left: " + ball.style.left + "\n";
+        });
+    </script>
+
+</body>
+
+</html>
